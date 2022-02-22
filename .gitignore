@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Cinema4D
+*.mp4
+*.xml
+*.c4d
+
+# macOS
+.DS_Store
