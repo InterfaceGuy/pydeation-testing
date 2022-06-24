@@ -60,7 +60,7 @@ class XPressionTest(Scene):
     """testing the xpression class"""
 
     def construct(self):
-        
+
         sphere = Sphere()
 
         # gather desc_ids
@@ -71,14 +71,19 @@ class XPressionTest(Scene):
         object_node_out = XObject(sphere, link_target=sphere.sketch_material)
 
         # create ports
-        parameter_port_out = object_node_out.obj.AddPort(c4d.GV_PORT_OUTPUT, sketch_completion_desc_id)
+        parameter_port_out = object_node_out.obj.AddPort(
+            c4d.GV_PORT_OUTPUT, sketch_completion_desc_id)
 
         # combine to xpression
-        parameter = UParameter(sphere, sketch_completion_desc_id, link_target=sphere.sketch_material, name="SketchCompletion")
+        parameter = UParameter(sphere, sketch_completion_desc_id,
+                               link_target=sphere.sketch_material, name="SketchCompletion")
         animator1 = XAnimator(sphere, name="Draw", interpolate=True)
-        animator2 = XAnimator(sphere, name="SinDraw", formula="sin(Pi*t)*sin(Pi*t)")
-        composition1 = XAnimation(animator1, animator2, target=sphere, parameter=parameter)
-        composition2 = XComposition((animator2,(0,1/2)), (animator1,(1/2,1)), target=sphere, name="FillThenDraw")
+        animator2 = XAnimator(sphere, name="SinDraw",
+                              formula="sin(Pi*t)*sin(Pi*t)")
+        composition1 = XAnimation(
+            animator1, animator2, target=sphere, parameter=parameter)
+        composition2 = XComposition(
+            (animator2, (0, 1 / 2)), (animator1, (1 / 2, 1)), target=sphere, name="FillThenDraw")
 
 
 class PulseTest(Scene):
@@ -89,11 +94,12 @@ class PulseTest(Scene):
         sphere = Sphere()
 
         self.play(
-            Pulse(sphere, rel_stop=1/2),
-            Pulse(sphere, n=3, filling_upper=0.1, rel_start=1/2),
-            Move(sphere, x=-200, rel_stop=1/2),
-            Move(sphere, x=200, relative=False, rel_start=1/2),
+            Pulse(sphere, rel_stop=1 / 2),
+            Pulse(sphere, n=3, filling_upper=0.1, rel_start=1 / 2),
+            Move(sphere, x=-200, rel_stop=1 / 2),
+            Move(sphere, x=200, relative=False, rel_start=1 / 2),
             run_time=3)
+
 
 class OverrideControllerTest(Scene):
     """testing the updated override controller"""
@@ -101,13 +107,47 @@ class OverrideControllerTest(Scene):
     def construct(self):
 
         sphere = Sphere()
-        
-        self.play(Fill(sphere), run_time=1/2)
+
+        self.play(Fill(sphere), run_time=1 / 2)
         #self.play(ChangeFillColorG(sphere, color_g=0), run_time=1/2)
-        self.play(ChangeFillColorGB(sphere, color=RED), run_time=2+1/2)
+        self.play(ChangeFillColorGB(sphere, color=RED), run_time=2 + 1 / 2)
         #self.play(ChangeFillColorGB(sphere, color=WHITE), run_time=1)
         #self.play(ChangeFillColorG(sphere, color_g=0), run_time=1)
 
+
+class MorphTest(Scene):
+    """testing the morph animator"""
+
+    def construct(self):
+
+        spline_ini = Rectangle(y=100, h=1, p=1, b=1)
+        #spline_ini = Text("let's try something really")
+        spline_fin = Text("spirit")
+        #sphere = Sphere()
+
+        self.wait()
+        self.play(Morph(spline_ini, spline_fin, mode="linear"), run_time=1)
+        self.wait()
+
+
+class PositioningTest(Scene):
+    """testing some positioning methods"""
+
+    def construct(self):
+
+        big_circle = Circle()
+        numbers = Group(*[Text(str(i + 1), height=20) for i in range(24)])
+        rectangles = Group(*[Rectangle(width=10, height=10)
+                             for i in range(20)])
+        circles = Group(*[Circle(radius=10)
+                          for i in range(5)])
+        numbers.position_on_circle()
+        rectangles.position_on_spline(big_circle)
+        circles.position_on_line()
+
+        text = Text("I")
+        text1 = Text("&")
+        text.attach_to(text1)
 
 
 # deepflatten_test = DeepflattenTest()
@@ -116,4 +156,6 @@ class OverrideControllerTest(Scene):
 # draw_test = DrawTest()
 # xpression_test = XPressionTest()
 # pulse_test = PulseTest()
-override_controller_test = OverrideControllerTest()
+# override_controller_test = OverrideControllerTest()
+# morph_test = MorphTest()
+positioning_test = PositioningTest()
